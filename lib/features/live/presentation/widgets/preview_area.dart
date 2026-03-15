@@ -7,6 +7,9 @@ import '../../../scenes/presentation/providers/scenes_provider.dart';
 import '../../../scenes/domain/entities/scene.dart';
 import '../../../../core/entities/source.dart';
 import '../../../screen_capture/presentation/widgets/screen_capture_widget.dart';
+import '../../../sources/presentation/widgets/image_source_widget.dart';
+import '../../../sources/presentation/widgets/text_source_widget.dart';
+import '../../../sources/presentation/widgets/color_source_widget.dart';
 
 class PreviewArea extends ConsumerWidget {
   const PreviewArea({super.key});
@@ -64,19 +67,17 @@ class PreviewArea extends ConsumerWidget {
         return ScreenCaptureWidget(sourceId: source.id);
       
       case SourceType.color:
-        return Container(color: Color(source.settings['color'] as int? ?? 0xFF000000));
+        return ColorSourceWidget(source: source);
       
       case SourceType.image:
-        // TODO: Implement image source
-        return _buildSourcePlaceholder(Icons.image, 'Imagem');
+        return ImageSourceWidget(source: source);
       
       case SourceType.video:
         // TODO: Implement video source
         return _buildSourcePlaceholder(Icons.movie, 'Vídeo');
       
       case SourceType.text:
-        // TODO: Implement text source
-        return _buildSourcePlaceholder(Icons.text_fields, 'Texto');
+        return TextSourceWidget(source: source);
       
       case SourceType.browser:
         // TODO: Implement browser source

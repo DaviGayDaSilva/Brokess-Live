@@ -4,6 +4,7 @@ import '../../../stream/presentation/providers/stream_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/entities/stream_settings.dart';
 import '../providers/camera_provider.dart';
+import '../../../audio/presentation/widgets/audio_mixer_widget.dart';
 
 class StreamControls extends ConsumerWidget {
   const StreamControls({super.key});
@@ -44,7 +45,9 @@ class StreamControls extends ConsumerWidget {
                 _buildControlButton(
                   icon: Icons.mic_off,
                   label: 'Áudio',
-                  onTap: () {},
+                  onTap: () {
+                    _showAudioMixer(context);
+                  },
                 ),
                 _buildControlButton(
                   icon: Icons.settings,
@@ -256,6 +259,15 @@ class StreamControls extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showAudioMixer(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const AudioMixerWidget(),
     );
   }
 }
