@@ -7,6 +7,7 @@ enum SourceType {
   text,
   color,
   browser,
+  screenCapture,
 }
 
 class Source extends Equatable {

@@ -35,6 +35,9 @@ dependencies:
   video_player: ^2.9.3
   image_picker: ^1.1.2
   
+  # Screen Capture
+  screen_capturer: ^0.2.2
+  
   # WebRTC for streaming
   flutter_webrtc: ^0.12.8
   

@@ -367,6 +367,15 @@ class _SceneCard extends ConsumerWidget {
               'Página web',
               SourceType.browser,
             ),
+            _buildSourceOption(
+              context,
+              ref,
+              sceneId,
+              Icons.screen_share,
+              'Transmissão de Tela',
+              'Capture a tela do dispositivo',
+              SourceType.screenCapture,
+            ),
           ],
         ),
       ),
@@ -465,6 +474,8 @@ class _SourceChip extends ConsumerWidget {
         return Icons.color_lens;
       case SourceType.browser:
         return Icons.public;
+      case SourceType.screenCapture:
+        return Icons.screen_share;
     }
   }
 }

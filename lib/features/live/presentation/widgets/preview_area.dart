@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/camera_provider.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../scenes/presentation/providers/scenes_provider.dart';
+import '../../../scenes/domain/entities/scene.dart';
+import '../../../../core/entities/source.dart';
+import '../../../screen_capture/presentation/widgets/screen_capture_widget.dart';
 
 class PreviewArea extends ConsumerWidget {
   const PreviewArea({super.key});
@@ -11,6 +15,7 @@ class PreviewArea extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cameraState = ref.watch(cameraProvider);
     final controller = cameraState.controller;
+    final activeScene = ref.watch(activeSceneProvider);
 
     return Container(
       margin: const EdgeInsets.all(8),
@@ -27,52 +32,105 @@ class PreviewArea extends ConsumerWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: cameraState.isInitialized && controller != null
-            ? Stack(
-                fit: StackFit.expand,
-                children: [
-                  // Camera Preview
-                  CameraPreview(controller),
-                  // Overlay - can add more layers here
-                  const PreviewOverlay(),
-                ],
-              )
-            : _buildPlaceholder(cameraState.errorMessage),
+        child: _buildScenePreview(activeScene, cameraState, controller),
       ),
     );
   }
 
-  Widget _buildPlaceholder(String? errorMessage) {
+  Widget _buildScenePreview(Scene? scene, CameraState cameraState, CameraController? controller) {
+    if (scene == null || scene.sources.isEmpty) {
+      return _buildEmptyPreview();
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        for (final source in scene.sources.where((s) => s.visible))
+          _buildSourceWidget(source, cameraState, controller),
+        const PreviewOverlay(),
+      ],
+    );
+  }
+
+  Widget _buildSourceWidget(Source source, CameraState cameraState, CameraController? controller) {
+    switch (source.type) {
+      case SourceType.camera:
+        if (cameraState.isInitialized && controller != null) {
+          return CameraPreview(controller);
+        }
+        return _buildSourcePlaceholder(Icons.videocam, 'Câmera');
+      
+      case SourceType.screenCapture:
+        return ScreenCaptureWidget(sourceId: source.id);
+      
+      case SourceType.color:
+        return Container(color: Color(source.settings['color'] as int? ?? 0xFF000000));
+      
+      case SourceType.image:
+        // TODO: Implement image source
+        return _buildSourcePlaceholder(Icons.image, 'Imagem');
+      
+      case SourceType.video:
+        // TODO: Implement video source
+        return _buildSourcePlaceholder(Icons.movie, 'Vídeo');
+      
+      case SourceType.text:
+        // TODO: Implement text source
+        return _buildSourcePlaceholder(Icons.text_fields, 'Texto');
+      
+      case SourceType.browser:
+        // TODO: Implement browser source
+        return _buildSourcePlaceholder(Icons.public, 'Navegador');
+    }
+  }
+
+  Widget _buildEmptyPreview() {
     return Container(
       color: AppTheme.backgroundColor,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              errorMessage != null ? Icons.error_outline : Icons.videocam_off,
+            const Icon(
+              Icons.layers_outlined,
               size: 64,
-              color: errorMessage != null
-                  ? AppTheme.errorColor
-                  : AppTheme.textSecondary,
+              color: AppTheme.textSecondary,
             ),
             const SizedBox(height: 16),
-            Text(
-              errorMessage ?? 'Inicializando câmera...',
-              style: const TextStyle(
+            const Text(
+              'Nenhuma fonte na cena',
+              style: TextStyle(
                 color: AppTheme.textSecondary,
                 fontSize: 14,
               ),
-              textAlign: TextAlign.center,
             ),
-            if (errorMessage != null) ...[
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.refresh, size: 18),
-                label: const Text('Tentar novamente'),
+            const SizedBox(height: 8),
+            const Text(
+              'Adicione fontes na aba Cenas',
+              style: TextStyle(
+                color: AppTheme.textHint,
+                fontSize: 12,
               ),
-            ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSourcePlaceholder(IconData icon, String label) {
+    return Container(
+      color: AppTheme.surfaceColor,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 48, color: AppTheme.textSecondary),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(color: AppTheme.textSecondary),
+            ),
           ],
         ),
       ),
