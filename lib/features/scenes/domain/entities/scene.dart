@@ -47,7 +47,7 @@ class Scene extends Equatable {
       id: json['id'] as String,
       name: json['name'] as String,
       sources: (json['sources'] as List<dynamic>?)
-              ?.map((s) => Source.fromJson(s as Map<String, dynamic>))
+              ?.map<Source>((s) => Source.fromJson(s as Map<String, dynamic>))
               .toList() ??
           [],
       isActive: json['isActive'] as bool? ?? false,

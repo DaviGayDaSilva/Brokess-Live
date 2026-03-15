@@ -17,7 +17,7 @@ class ScenesNotifier extends StateNotifier<List<Scene>> {
   void _loadScenes() {
     final scenesJson = _box.get('scenes', defaultValue: <Map>[]);
     final scenes = scenesJson
-        .map((s) => Scene.fromJson(Map<String, dynamic>.from(s)))
+        .map<Scene>((s) => Scene.fromJson(Map<String, dynamic>.from(s as Map)))
         .toList();
     
     if (scenes.isEmpty) {
