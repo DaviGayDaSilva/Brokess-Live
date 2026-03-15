@@ -1,0 +1,68 @@
+name: brokess_live
+description: "Brokess Live (BKL) - Open source mobile streaming app like OBS"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  
+  # State Management
+  flutter_riverpod: ^2.6.1
+  
+  # Dependency Injection
+  get_it: ^8.0.3
+  
+  # Navigation
+  go_router: ^14.8.1
+  
+  # Storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.3.5
+  path_provider: ^2.1.5
+  
+  # Permissions
+  permission_handler: ^11.3.1
+  
+  # Camera & Media
+  camera: ^0.11.1
+  video_player: ^2.9.3
+  image_picker: ^1.1.2
+  
+  # WebRTC for streaming
+  flutter_webrtc: ^0.12.8
+  
+  # Web Overlay
+  webview_flutter: ^4.10.0
+  
+  # UI Components
+  flutter_svg: ^2.0.17
+  
+  # File handling
+  file_picker: ^8.1.7
+  
+  # Utilities
+  uuid: ^4.5.1
+  equatable: ^2.0.7
+  rxdart: ^0.28.0
+  intl: ^0.20.2
+  collection: ^1.19.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
